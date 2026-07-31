@@ -1,0 +1,6 @@
+{
+  "name": "Storly - Organic & Grocery E-Commerce",
+  "description": "Modern, Premium, Pixel-Perfect Grocery & Organic E-commerce Website with Full-Stack Features",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
