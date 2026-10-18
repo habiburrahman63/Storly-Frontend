@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { X, Sparkles, Mail, Lock, User as UserIcon, ShieldAlert } from 'lucide-react';
+import { X, Sparkles, Mail, Lock, User as UserIcon } from 'lucide-react';
 
 export const AuthModal: React.FC = () => {
   const { isAuthOpen, setIsAuthOpen, login, registerUser } = useApp();
@@ -58,20 +58,13 @@ export const AuthModal: React.FC = () => {
             <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider text-center">
               Quick Sign-In Access
             </p>
-            <div className="grid grid-cols-2 gap-2 text-xs font-bold">
+            <div className="flex justify-center text-xs font-bold">
               <button
                 type="button"
                 onClick={() => login('sarah@example.com', 'user')}
-                className="p-2.5 bg-emerald-50 hover:bg-emerald-100 text-[#034848] rounded-xl border border-emerald-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                className="w-full p-2.5 bg-emerald-50 hover:bg-emerald-100 text-[#034848] rounded-xl border border-emerald-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <UserIcon className="w-4 h-4 text-[#72bf44]" /> Customer Account
-              </button>
-              <button
-                type="button"
-                onClick={() => login('admin@storly.com', 'admin')}
-                className="p-2.5 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-xl border border-amber-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <ShieldAlert className="w-4 h-4 text-amber-600" /> Store Admin
               </button>
             </div>
           </div>

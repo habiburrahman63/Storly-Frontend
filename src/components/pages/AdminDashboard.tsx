@@ -29,6 +29,8 @@ import {
 
 export const AdminDashboard: React.FC = () => {
   const {
+    user,
+    navigate,
     products,
     orders,
     addProduct,
@@ -37,6 +39,21 @@ export const AdminDashboard: React.FC = () => {
     updateOrderStatus,
     showToast,
   } = useApp();
+
+  if (user?.role !== 'admin') {
+    return (
+      <div className="max-w-md mx-auto py-20 text-center space-y-4 px-4">
+        <h2 className="text-xl font-black text-slate-800">Access Restricted</h2>
+        <p className="text-xs text-slate-500">Only administrators have access to this section.</p>
+        <button
+          onClick={() => navigate('user-dashboard')}
+          className="px-6 py-2.5 bg-[#034848] text-white text-xs font-bold rounded-xl cursor-pointer"
+        >
+          Go to My Account
+        </button>
+      </div>
+    );
+  }
 
   const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'orders'>('overview');
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);

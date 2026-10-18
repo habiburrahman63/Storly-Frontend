@@ -36,7 +36,7 @@ import { SearchModal } from './components/common/SearchModal';
 import { AIAssistantModal } from './components/common/AIAssistantModal';
 
 const MainContent: React.FC = () => {
-  const { currentView } = useApp();
+  const { currentView, user } = useApp();
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fafcfb] text-slate-800 font-sans selection:bg-[#72bf44] selection:text-white">
@@ -67,7 +67,7 @@ const MainContent: React.FC = () => {
         {currentView === 'checkout' && <CheckoutPage />}
         {currentView === 'order-success' && <OrderSuccessPage />}
         {currentView === 'user-dashboard' && <UserDashboard />}
-        {currentView === 'admin' && <AdminDashboard />}
+        {currentView === 'admin' && (user?.role === 'admin' ? <AdminDashboard /> : <UserDashboard />)}
         {currentView === 'about' && <AboutPage />}
         {currentView === 'contact' && <ContactPage />}
         {currentView === 'pages' && <PagesOverviewPage />}

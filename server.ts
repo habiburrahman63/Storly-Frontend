@@ -60,7 +60,7 @@ let orders: Order[] = [
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 5173;
 
   app.use(express.json());
 
@@ -407,7 +407,7 @@ Provide a helpful, polite, nutritional response (2-3 sentences max) recommending
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Storly server running on http://0.0.0.0:${PORT}`);
+    console.log(`Storly server running on http://localhost:${PORT}`);
   });
 }
 

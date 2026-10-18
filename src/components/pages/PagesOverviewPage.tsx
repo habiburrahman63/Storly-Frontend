@@ -5,7 +5,6 @@ import {
   ShoppingBag,
   Heart,
   User,
-  ShieldAlert,
   FileText,
   Info,
   PhoneCall,
@@ -38,7 +37,6 @@ export const PagesOverviewPage: React.FC = () => {
         { name: 'User Profile & Order History', view: 'user-dashboard' as const, icon: User, tag: user ? 'Logged In' : 'Sign In Required' },
         { name: 'Saved Wishlist Items', view: 'wishlist' as const, icon: Heart },
         { name: 'Active Cart Checkout', view: 'checkout' as const, icon: CheckCircle },
-        { name: 'Admin Management Panel', view: 'admin' as const, icon: ShieldAlert, tag: user?.role === 'admin' ? 'Admin Access' : 'Restricted' },
       ],
     },
     {

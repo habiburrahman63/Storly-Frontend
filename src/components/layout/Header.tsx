@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import {
   Phone,
@@ -9,12 +9,13 @@ import {
   ChevronDown,
   LayoutGrid,
   Sparkles,
-  ShieldCheck,
   Headphones,
   Menu,
   X,
   LogOut,
   SlidersHorizontal,
+  Package,
+  LayoutDashboard,
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -44,6 +45,21 @@ export const Header: React.FC = () => {
   const [selectedCategorySearch, setSelectedCategorySearch] = useState('All Categories');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
+  const accountDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (accountDropdownRef.current && !accountDropdownRef.current.contains(event.target as Node)) {
+        setIsAccountDropdownOpen(false);
+      }
+    };
+    if (isAccountDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isAccountDropdownOpen]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -193,7 +209,7 @@ export const Header: React.FC = () => {
         {/* Right Action Icons & Support Hotline */}
         <div className="flex items-center gap-5">
           {/* User Account */}
-          <div className="relative">
+          <div className="relative" ref={accountDropdownRef}>
             <button
               onClick={() => (user ? setIsAccountDropdownOpen(!isAccountDropdownOpen) : setIsAuthOpen(true))}
               className="flex items-center gap-2 hover:text-[#034848] transition-colors cursor-pointer"
@@ -230,40 +246,69 @@ export const Header: React.FC = () => {
 
             {/* Account Dropdown */}
             {isAccountDropdownOpen && user && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-stone-200 py-2 z-50 text-xs font-medium">
-                <div className="px-4 py-2 border-b border-stone-100">
-                  <p className="font-bold text-slate-800">{user.name}</p>
-                  <p className="text-slate-400 text-[11px] truncate">{user.email}</p>
+              <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-stone-200 py-2.5 z-50 text-xs font-medium animate-in fade-in slide-in-from-top-2">
+                {/* User Info Header */}
+                <div className="px-4 py-2.5 border-b border-stone-100">
+                  <p className="font-extrabold text-slate-900 truncate">{user.name}</p>
+                  <p className="text-slate-400 text-[11px] truncate mt-0.5">{user.email}</p>
                 </div>
-                <button
-                  onClick={() => {
-                    setIsAccountDropdownOpen(false);
-                    navigate('user-dashboard');
-                  }}
-                  className="w-full text-left px-4 py-2 hover:bg-stone-50 text-slate-700"
-                >
-                  My Dashboard
-                </button>
-                {user.role === 'admin' && (
+
+                {/* Account Navigation Links */}
+                <div className="py-1">
                   <button
                     onClick={() => {
                       setIsAccountDropdownOpen(false);
-                      navigate('admin');
+                      navigate('user-dashboard');
                     }}
-                    className="w-full text-left px-4 py-2 hover:bg-emerald-50 text-[#034848] font-bold"
+                    className="w-full text-left px-4 py-2 hover:bg-stone-50 text-slate-700 flex items-center gap-2.5 transition-colors cursor-pointer"
                   >
-                    ⚡ Admin Dashboard
+                    <LayoutDashboard className="w-4 h-4 text-[#034848]" />
+                    <span>My Dashboard</span>
                   </button>
-                )}
-                <button
-                  onClick={() => {
-                    setIsAccountDropdownOpen(false);
-                    logout();
-                  }}
-                  className="w-full text-left px-4 py-2 hover:bg-rose-50 text-rose-600 flex items-center gap-2 border-t border-stone-100 mt-1"
-                >
-                  <LogOut className="w-3.5 h-3.5" /> Log Out
-                </button>
+
+                  <button
+                    onClick={() => {
+                      setIsAccountDropdownOpen(false);
+                      navigate('user-dashboard');
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-stone-50 text-slate-700 flex items-center gap-2.5 transition-colors cursor-pointer"
+                  >
+                    <Package className="w-4 h-4 text-[#034848]" />
+                    <span>My Orders</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsAccountDropdownOpen(false);
+                      setIsWishlistOpen(true);
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-stone-50 text-slate-700 flex items-center justify-between transition-colors cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <Heart className="w-4 h-4 text-rose-500" />
+                      <span>Wishlist</span>
+                    </span>
+                    {wishlist.length > 0 && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 bg-rose-50 text-rose-600 rounded-full">
+                        {wishlist.length}
+                      </span>
+                    )}
+                  </button>
+                </div>
+
+                {/* Logout */}
+                <div className="pt-1 border-t border-stone-100 mt-1">
+                  <button
+                    onClick={() => {
+                      setIsAccountDropdownOpen(false);
+                      logout();
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-rose-50 text-rose-600 flex items-center gap-2.5 transition-colors cursor-pointer font-semibold"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Log Out</span>
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -506,16 +551,6 @@ export const Header: React.FC = () => {
             >
               Contact
             </button>
-
-            {/* Admin Link if Admin */}
-            {user?.role === 'admin' && (
-              <button
-                onClick={() => navigate('admin')}
-                className="px-3 py-1 bg-amber-500/10 text-amber-700 border border-amber-500/30 rounded-lg hover:bg-amber-500 hover:text-white transition-colors cursor-pointer"
-              >
-                Admin Panel
-              </button>
-            )}
           </nav>
 
           {/* AI Shopping Assistant Button */}
@@ -567,11 +602,6 @@ export const Header: React.FC = () => {
             <button onClick={() => { setIsMobileMenuOpen(false); navigate('user-dashboard'); }} className="text-left py-2 border-b cursor-pointer">
               User Dashboard
             </button>
-            {user?.role === 'admin' && (
-              <button onClick={() => { setIsMobileMenuOpen(false); navigate('admin'); }} className="text-left py-2 text-amber-600 font-bold border-b cursor-pointer">
-                ⚡ Admin Dashboard
-              </button>
-            )}
           </div>
         </div>
       )}
